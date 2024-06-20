@@ -7,31 +7,35 @@ const path = require("path");
 const app = express();
 
 // Creating the date Object to work with date n time.
-const dateObj = new Date();
+const getData = () => {
+  const dateObj = new Date();
 
-// Getting date values and formatting them into a single string.
-const date = `${dateObj.getDate()}-${
-  dateObj.getMonth() + 1
-}-${dateObj.getFullYear()}`;
+  // Getting date values and formatting them into a single string.
+  const date = `${dateObj.getDate()}-${
+    dateObj.getMonth() + 1
+  }-${dateObj.getFullYear()}`;
 
-// Getting time values and formatting them into a single string.
-const time = `${dateObj.getHours()}-${dateObj.getMinutes()}-${dateObj.getSeconds()}`;
+  // Getting time values and formatting them into a single string.
+  const time = `${dateObj.getHours()}-${dateObj.getMinutes()}-${dateObj.getSeconds()}`;
 
-// Creating a data to be inserted within the file.
-const data = `Current Timestamp: ${date.replaceAll("-", "/")}-${time.replaceAll(
-  "-",
-  ":"
-)}`;
+  // Creating a data to be inserted within the file.
+  const data = `Current Timestamp: ${date.replaceAll(
+    "-",
+    "/"
+  )}-${time.replaceAll("-", ":")}`;
+  return [date, time, data];
+};
 
 // Creating a POST route to create a file.
 app.post("/files", (request, response) => {
+  const [date, time, data] = getData();
   // Creating a file in the directory.
   fs.writeFile(`./files/${date}-${time}.txt`, data, (err) => {
     // Checking for any errors.
     if (err) {
       response.send("Error while creating file", err);
     } else {
-      response.send("File created successfully");
+      response.send("File created successfully ");
     }
   });
 });
